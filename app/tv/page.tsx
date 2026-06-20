@@ -31,7 +31,7 @@ export default async function TvPage() {
                 src="/brand/monkey-wordmark.png"
                 width={1200}
               />
-              <p className="text-2xl font-black uppercase text-[#e11d2e]">
+              <p className="text-2xl font-black uppercase text-[#00d26a]">
                 Ping Pong Ranking
               </p>
             </div>
@@ -40,7 +40,7 @@ export default async function TvPage() {
             <p className="text-sm font-bold uppercase text-white/60">
               Rey actual
             </p>
-            <p className="text-5xl font-black uppercase text-[#e11d2e]">
+            <p className="text-5xl font-black uppercase text-[#00d26a]">
               {leader ? leader.name : "-"}
             </p>
           </div>
@@ -67,7 +67,7 @@ export default async function TvPage() {
 
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-sm border-4 border-white bg-[#e11d2e] p-5 text-white">
+              <div className="rounded-sm border-4 border-white bg-[#00d26a] p-5 text-black">
                 <p className="text-sm font-black uppercase">Partidos</p>
                 <p className="mt-2 text-6xl font-black">{stats.totalMatches}</p>
               </div>

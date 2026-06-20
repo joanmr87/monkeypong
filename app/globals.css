@@ -3,6 +3,8 @@
 :root {
   --background: #f7f3e8;
   --foreground: #050505;
+  --brand-green: #00d26a;
+  --brand-green-deep: #008f4c;
 }
 
 @theme inline {
@@ -31,12 +33,12 @@ select {
   justify-content: center;
   border-radius: 6px;
   border: 2px solid #000;
-  background: #e11d2e;
+  background: var(--brand-green);
   padding: 0.625rem 1rem;
   font-size: 0.875rem;
   font-weight: 900;
   text-transform: uppercase;
-  color: white;
+  color: black;
   box-shadow: 4px 4px 0 #000;
   transition:
     background 160ms ease,
@@ -57,7 +59,7 @@ select {
 .link-action {
   font-size: 0.875rem;
   font-weight: 900;
-  color: #e11d2e;
+  color: var(--brand-green-deep);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -88,7 +90,7 @@ select {
 .field input:focus,
 .field select:focus {
   border-color: #047857;
-  box-shadow: 0 0 0 3px rgb(225 29 46 / 0.18);
+  box-shadow: 0 0 0 3px rgb(0 210 106 / 0.22);
 }
 
 .alert,

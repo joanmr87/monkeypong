@@ -39,7 +39,7 @@ export default async function Home() {
             width={978}
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 text-white">
-            <p className="text-sm font-black uppercase text-[#e11d2e]">
+            <p className="text-sm font-black uppercase text-[#00d26a]">
               Mesa activa
             </p>
             <p className="mt-1 text-4xl font-black uppercase">

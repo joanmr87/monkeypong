@@ -17,7 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-4 border-b-4 border-black pb-4 lg:flex-row lg:items-end lg:justify-between">
           <Link href="/" className="group flex items-end gap-3">
-            <span className="grid size-14 place-items-center overflow-hidden rounded-sm bg-black p-2 shadow-[4px_4px_0_#e11d2e]">
+            <span className="grid size-14 place-items-center overflow-hidden rounded-sm bg-black p-2 shadow-[4px_4px_0_#00d26a]">
               <Image
                 alt=""
                 className="h-full w-full object-contain invert"
@@ -44,7 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <nav className="flex flex-wrap gap-2">
             {navItems.map((item) => (
               <Link
-                className="rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_#000] transition hover:-translate-y-0.5 hover:bg-[#e11d2e] hover:text-white"
+                className="rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_#000] transition hover:-translate-y-0.5 hover:bg-[#00d26a] hover:text-black"
                 href={item.href}
                 key={item.href}
               >
@@ -70,7 +70,7 @@ export function StatBlock({
 }) {
   const toneClass =
     tone === "green"
-      ? "bg-[#e11d2e] text-white"
+      ? "bg-[#00d26a] text-black"
       : tone === "ink"
         ? "bg-black text-white"
         : "bg-white text-black";
@@ -105,7 +105,7 @@ export function RankingTable({ rows }: { rows: RankingRow[] }) {
             {rows.map((row) => (
               <tr
                 className={
-                  row.rankPosition === 1 ? "bg-[#ffe9ec]" : "bg-white"
+                  row.rankPosition === 1 ? "bg-[#e8fff2]" : "bg-white"
                 }
                 key={row.id}
               >
@@ -193,7 +193,7 @@ export function PageHeading({
   return (
     <section className="flex flex-col gap-3 py-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="text-xs font-black uppercase text-[#e11d2e]">{kicker}</p>
+        <p className="text-xs font-black uppercase text-[#008f4c]">{kicker}</p>
         <h1 className="mt-1 text-3xl font-black uppercase tracking-normal sm:text-5xl">
           {title}
         </h1>
