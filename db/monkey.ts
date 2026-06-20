@@ -50,6 +50,7 @@ const missingProductionDatabaseMessage =
 
 declare global {
   var monkeySql: SqlClient | undefined;
+  var monkeyDbReady: Promise<void> | undefined;
 }
 
 function nowIso() {
@@ -153,6 +154,16 @@ async function initializePostgres() {
   const sql = await getSql();
   if (!sql) return;
 
+  if (globalThis.monkeyDbReady) {
+    await globalThis.monkeyDbReady;
+    return;
+  }
+
+  globalThis.monkeyDbReady = initializePostgresSchema(sql);
+  await globalThis.monkeyDbReady;
+}
+
+async function initializePostgresSchema(sql: SqlClient) {
   await sql`
     CREATE TABLE IF NOT EXISTS players (
       id TEXT PRIMARY KEY,
@@ -185,18 +196,13 @@ async function initializePostgres() {
       ON matches (played_at DESC)
   `;
 
-  const [existing] = await sql<{ count: string }[]>`
-    SELECT COUNT(*) AS count FROM players
-  `;
-
-  if (Number(existing?.count ?? 0) === 0) {
-    const timestamp = nowIso();
-    for (const name of initialPlayers) {
-      await sql`
-        INSERT INTO players (id, name, nickname, created_at, updated_at)
-        VALUES (${crypto.randomUUID()}, ${name}, NULL, ${timestamp}, ${timestamp})
-      `;
-    }
+  const timestamp = nowIso();
+  for (const name of initialPlayers) {
+    await sql`
+      INSERT INTO players (id, name, nickname, created_at, updated_at)
+      VALUES (${crypto.randomUUID()}, ${name}, NULL, ${timestamp}, ${timestamp})
+      ON CONFLICT DO NOTHING
+    `;
   }
 }
 
