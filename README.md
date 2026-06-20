@@ -1,36 +1,72 @@
-# Monkey Ping Pong Ranking
+# Monkey Pong
 
 Ranking ATP para la mesa de ping pong de Bar Monkey.
 
 ## Stack
 
-- vinext / Next.js
+- Next.js
 - React
 - TypeScript
 - Tailwind CSS
-- Cloudflare D1
-- Drizzle schema and migrations
+- Postgres en produccion via `DATABASE_URL` o `POSTGRES_URL`
+- JSON local en `.data/monkeypong.json` para desarrollo sin configurar base
 
-## Quick Start
+## Local
 
 ```bash
 npm install
 npm run dev
+```
+
+La app corre en `http://localhost:3000`.
+
+## Deploy en Vercel
+
+El proyecto esta listo para importarse desde GitHub en Vercel.
+
+Build command:
+
+```bash
 npm run build
 ```
 
-Local development runs at `http://localhost:3000`.
+Output: el default de Next.js.
 
-## Routes
+Para que los jugadores y partidos persistan en produccion, configura una base
+Postgres y agrega una de estas variables en Vercel:
 
-- `/`: dashboard with totals, current number one, latest match, ranking preview,
-  and recent matches
-- `/ranking`: full ranking table
-- `/matches/new`: match registration form
-- `/matches`: match history
-- `/players`: player list with stats
-- `/players/new`: player creation form
-- `/tv`: dark TV scoreboard view for a horizontal bar screen
+```bash
+DATABASE_URL=postgres://...
+```
+
+o:
+
+```bash
+POSTGRES_URL=postgres://...
+```
+
+Puede ser Vercel Postgres, Neon, Supabase o cualquier Postgres compatible. La
+app crea las tablas automaticamente en el primer uso y carga estos jugadores
+iniciales si la tabla esta vacia:
+
+- Joan
+- Franco
+- Eric
+- Choco
+- Lautaro
+
+Si no configuras Postgres en Vercel, la app puede renderizar, pero los datos no
+van a persistir de forma confiable entre ejecuciones serverless.
+
+## Rutas
+
+- `/`: dashboard
+- `/ranking`: tabla completa del ranking
+- `/matches/new`: registrar partido
+- `/matches`: historial de partidos
+- `/players`: jugadores y estadisticas
+- `/players/new`: crear jugador
+- `/tv`: vista oscura para pantalla horizontal del bar
 
 ## API
 
@@ -40,50 +76,25 @@ Local development runs at `http://localhost:3000`.
 - `POST /api/matches`
 - `GET /api/ranking`
 
-## Ranking Rules
-
-Points are calculated dynamically from saved matches:
+## Reglas de Ranking
 
 ```text
 points = matchesWon * 3 + matchesLost * 1
 ```
 
-Sorting:
+Orden:
 
-1. More points
-2. Higher win rate
-3. More wins
-4. Fewer losses
-5. Alphabetical name
+1. Mas puntos
+2. Mayor win rate
+3. Mas ganados
+4. Menos perdidos
+5. Nombre alfabetico
 
-## Seed Data
+## Comandos
 
-On first database use, the app creates the schema and seeds:
-
-- Joan
-- Franco
-- Eric
-- Choco
-- Lautaro
-
-## Persistence
-
-The site declares a D1 binding in `.openai/hosting.json`:
-
-```json
-{
-  "d1": "DB",
-  "r2": null
-}
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run start
 ```
-
-The runtime initializes the local D1 tables when the app first reads or writes
-players and matches. Drizzle schema definitions live in `db/schema.ts`, and the
-generated migration lives under `drizzle/`.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run lint`: run ESLint
-- `npm run build`: verify Sites-compatible production output
-- `npm run db:generate`: generate Drizzle migrations after schema changes
