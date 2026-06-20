@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { AppShell, MatchList, PageHeading, RankingTable, StatBlock } from "./components";
 import { StorageBanner } from "./storage-banner";
 import { getDashboardStats, getStorageWarning } from "@/db/monkey";
@@ -23,18 +24,25 @@ export default async function Home() {
       />
 
       <section className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative min-h-64 overflow-hidden rounded-md border border-stone-300 bg-stone-900 shadow-sm">
+        <div className="relative min-h-72 overflow-hidden rounded-sm border-2 border-black bg-black shadow-[6px_6px_0_#000]">
           <div
             aria-label="Mesa de ping pong en un bar con paletas y pelota"
-            className="h-full w-full bg-cover bg-center"
+            className="absolute inset-0 h-full w-full bg-cover bg-center opacity-65 grayscale"
             role="img"
             style={{ backgroundImage: "url('/ping-pong-bar.png')" }}
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/90 to-transparent p-5 text-white">
-            <p className="text-sm font-black uppercase text-emerald-300">
+          <Image
+            alt=""
+            className="absolute right-4 top-4 h-24 w-24 object-contain opacity-90 invert"
+            height={1000}
+            src="/brand/monkey-mark.png"
+            width={978}
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 text-white">
+            <p className="text-sm font-black uppercase text-[#e11d2e]">
               Mesa activa
             </p>
-            <p className="mt-1 text-3xl font-black">
+            <p className="mt-1 text-4xl font-black uppercase">
               {leader ? `${leader.name} defiende el #1` : "Ranking inicial"}
             </p>
           </div>

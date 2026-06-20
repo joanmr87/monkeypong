@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "Monkey Ping Pong Ranking",
   description: "Ranking ATP para la mesa de ping pong de Bar Monkey.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/brand/monkey-block.png",
+    shortcut: "/brand/monkey-block.png",
   },
 };
 

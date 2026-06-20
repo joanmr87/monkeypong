@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Match, RankingRow } from "@/db/monkey";
 
 export const navItems = [
@@ -12,26 +13,38 @@ export const navItems = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="min-h-screen bg-stone-100 text-stone-950">
+    <main className="min-h-screen bg-[#f7f3e8] text-black">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 border-b border-stone-300 pb-4 lg:flex-row lg:items-end lg:justify-between">
-          <Link href="/" className="group flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-md bg-emerald-700 text-lg font-black text-white shadow-sm">
-              MP
+        <header className="flex flex-col gap-4 border-b-4 border-black pb-4 lg:flex-row lg:items-end lg:justify-between">
+          <Link href="/" className="group flex items-end gap-3">
+            <span className="grid size-14 place-items-center overflow-hidden rounded-sm bg-black p-2 shadow-[4px_4px_0_#e11d2e]">
+              <Image
+                alt=""
+                className="h-full w-full object-contain invert"
+                height={1000}
+                priority
+                src="/brand/monkey-mark.png"
+                width={978}
+              />
             </span>
-            <span>
-              <span className="block text-xl font-black leading-tight">
-                Monkey Ping Pong
-              </span>
-              <span className="block text-sm font-medium text-stone-600">
-                Ranking del Bar Monkey
+            <span className="grid gap-1">
+              <Image
+                alt="Monkey"
+                className="h-12 w-auto max-w-[210px] object-contain object-left"
+                height={741}
+                priority
+                src="/brand/monkey-wordmark.png"
+                width={1200}
+              />
+              <span className="block text-xs font-black uppercase text-black">
+                Ping Pong Ranking
               </span>
             </span>
           </Link>
           <nav className="flex flex-wrap gap-2">
             {navItems.map((item) => (
               <Link
-                className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-semibold text-stone-700 shadow-sm transition hover:border-emerald-700 hover:text-emerald-800"
+                className="rounded-sm border-2 border-black bg-white px-3 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_#000] transition hover:-translate-y-0.5 hover:bg-[#e11d2e] hover:text-white"
                 href={item.href}
                 key={item.href}
               >
@@ -57,13 +70,13 @@ export function StatBlock({
 }) {
   const toneClass =
     tone === "green"
-      ? "bg-emerald-700 text-white"
+      ? "bg-[#e11d2e] text-white"
       : tone === "ink"
-        ? "bg-stone-950 text-white"
-        : "bg-white text-stone-950";
+        ? "bg-black text-white"
+        : "bg-white text-black";
 
   return (
-    <div className={`rounded-md border border-stone-300 p-4 shadow-sm ${toneClass}`}>
+    <div className={`rounded-sm border-2 border-black p-4 shadow-[4px_4px_0_#000] ${toneClass}`}>
       <p className="text-xs font-bold uppercase text-current opacity-70">
         {label}
       </p>
@@ -74,10 +87,10 @@ export function StatBlock({
 
 export function RankingTable({ rows }: { rows: RankingRow[] }) {
   return (
-    <div className="max-w-full overflow-hidden rounded-md border border-stone-300 bg-white shadow-sm">
+    <div className="max-w-full overflow-hidden rounded-sm border-2 border-black bg-white shadow-[5px_5px_0_#000]">
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-stone-950 text-white">
+          <thead className="bg-black text-white">
             <tr>
               {["#", "Jugador", "PJ", "PG", "PP", "Win Rate", "Puntos"].map(
                 (heading) => (
@@ -92,7 +105,7 @@ export function RankingTable({ rows }: { rows: RankingRow[] }) {
             {rows.map((row) => (
               <tr
                 className={
-                  row.rankPosition === 1 ? "bg-emerald-50" : "bg-white"
+                  row.rankPosition === 1 ? "bg-[#ffe9ec]" : "bg-white"
                 }
                 key={row.id}
               >
@@ -102,7 +115,7 @@ export function RankingTable({ rows }: { rows: RankingRow[] }) {
                 <td className="px-4 py-4">
                   <div className="font-black">{row.name}</div>
                   {row.nickname ? (
-                    <div className="text-xs font-semibold text-stone-500">
+                    <div className="text-xs font-semibold text-neutral-500">
                       {row.nickname}
                     </div>
                   ) : null}
@@ -124,7 +137,7 @@ export function RankingTable({ rows }: { rows: RankingRow[] }) {
 export function MatchList({ matches }: { matches: Match[] }) {
   if (!matches.length) {
     return (
-      <div className="rounded-md border border-dashed border-stone-300 bg-white p-6 text-sm font-semibold text-stone-600">
+      <div className="rounded-sm border-2 border-dashed border-black bg-white p-6 text-sm font-black uppercase text-neutral-600">
         Todavia no hay partidos cargados.
       </div>
     );
@@ -134,11 +147,11 @@ export function MatchList({ matches }: { matches: Match[] }) {
     <div className="grid gap-3">
       {matches.map((match) => (
         <article
-          className="grid gap-3 rounded-md border border-stone-300 bg-white p-4 shadow-sm md:grid-cols-[1fr_auto]"
+          className="grid gap-3 rounded-sm border-2 border-black bg-white p-4 shadow-[4px_4px_0_#000] md:grid-cols-[1fr_auto]"
           key={match.id}
         >
           <div>
-            <p className="text-xs font-bold uppercase text-stone-500">
+            <p className="text-xs font-bold uppercase text-neutral-500">
               {new Intl.DateTimeFormat("es-AR", {
                 dateStyle: "medium",
                 timeStyle: "short",
@@ -147,17 +160,17 @@ export function MatchList({ matches }: { matches: Match[] }) {
             <h3 className="mt-1 text-lg font-black">
               {match.playerAName} vs {match.playerBName}
             </h3>
-            <p className="text-sm font-semibold text-stone-600">
+            <p className="text-sm font-semibold text-neutral-600">
               Gano {match.winnerName}; perdio {match.loserName}
             </p>
           </div>
           <div className="flex items-center justify-start md:justify-end">
             {match.playerAScore !== null && match.playerBScore !== null ? (
-              <span className="rounded-md bg-stone-950 px-3 py-2 text-lg font-black text-white">
+              <span className="rounded-sm bg-black px-3 py-2 text-lg font-black text-white">
                 {match.playerAScore} - {match.playerBScore}
               </span>
             ) : (
-              <span className="rounded-md bg-stone-200 px-3 py-2 text-sm font-bold text-stone-700">
+              <span className="rounded-sm bg-neutral-200 px-3 py-2 text-sm font-bold text-neutral-700">
                 Sin score
               </span>
             )}
@@ -180,8 +193,8 @@ export function PageHeading({
   return (
     <section className="flex flex-col gap-3 py-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="text-xs font-black uppercase text-emerald-800">{kicker}</p>
-        <h1 className="mt-1 text-3xl font-black tracking-normal sm:text-4xl">
+        <p className="text-xs font-black uppercase text-[#e11d2e]">{kicker}</p>
+        <h1 className="mt-1 text-3xl font-black uppercase tracking-normal sm:text-5xl">
           {title}
         </h1>
       </div>
