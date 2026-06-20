@@ -55,8 +55,17 @@ iniciales si la tabla esta vacia:
 - Choco
 - Lautaro
 
-Si no configuras Postgres en Vercel, la app puede renderizar, pero los datos no
-van a persistir de forma confiable entre ejecuciones serverless.
+Si no configuras Postgres en Vercel, la app muestra una advertencia y bloquea
+las altas de jugadores/partidos. Esto evita que parezca que guardo datos cuando
+en realidad Vercel solo podria escribir en almacenamiento temporal.
+
+Para chequear el estado de almacenamiento:
+
+```bash
+GET /api/storage
+```
+
+Debe devolver `"persistent": true` en produccion antes de usar la app en el bar.
 
 ## Rutas
 

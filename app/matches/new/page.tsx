@@ -1,5 +1,6 @@
 import { AppShell, PageHeading } from "../../components";
-import { listPlayers } from "@/db/monkey";
+import { StorageBanner } from "../../storage-banner";
+import { getStorageWarning, isPersistentStorageConfigured, listPlayers } from "@/db/monkey";
 
 export const dynamic = "force-dynamic";
 
@@ -10,10 +11,13 @@ export default async function NewMatchPage({
 }) {
   const [players, params] = await Promise.all([listPlayers(), searchParams]);
   const hasEnoughPlayers = players.length >= 2;
+  const storageWarning = getStorageWarning();
+  const canWrite = !process.env.VERCEL || isPersistentStorageConfigured();
 
   return (
     <AppShell>
       <PageHeading kicker="Partidos" title="Registrar partido" />
+      <StorageBanner message={storageWarning} />
       {params.error ? <p className="alert">{params.error}</p> : null}
       {params.created ? <p className="success">Partido guardado.</p> : null}
 
@@ -79,7 +83,7 @@ export default async function NewMatchPage({
           <input name="playedAt" type="datetime-local" />
         </label>
 
-        <button className="btn-primary w-fit" disabled={!hasEnoughPlayers} type="submit">
+        <button className="btn-primary w-fit" disabled={!hasEnoughPlayers || !canWrite} type="submit">
           Guardar partido
         </button>
       </form>

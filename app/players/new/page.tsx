@@ -1,4 +1,6 @@
 import { AppShell, PageHeading } from "../../components";
+import { StorageBanner } from "../../storage-banner";
+import { getStorageWarning, isPersistentStorageConfigured } from "@/db/monkey";
 
 export const dynamic = "force-dynamic";
 
@@ -8,10 +10,13 @@ export default async function NewPlayerPage({
   searchParams: Promise<{ error?: string; created?: string }>;
 }) {
   const params = await searchParams;
+  const storageWarning = getStorageWarning();
+  const canWrite = !process.env.VERCEL || isPersistentStorageConfigured();
 
   return (
     <AppShell>
       <PageHeading kicker="Jugadores" title="Crear jugador" />
+      <StorageBanner message={storageWarning} />
       {params.error ? <p className="alert">{params.error}</p> : null}
       {params.created ? <p className="success">Jugador creado.</p> : null}
       <form
@@ -27,7 +32,7 @@ export default async function NewPlayerPage({
           <span>Apodo</span>
           <input name="nickname" placeholder="Opcional" type="text" />
         </label>
-        <button className="btn-primary w-fit" type="submit">
+        <button className="btn-primary w-fit" disabled={!canWrite} type="submit">
           Crear jugador
         </button>
       </form>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AppShell, MatchList, PageHeading, RankingTable, StatBlock } from "./components";
-import { getDashboardStats } from "@/db/monkey";
+import { StorageBanner } from "./storage-banner";
+import { getDashboardStats, getStorageWarning } from "@/db/monkey";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,7 @@ export default async function Home() {
 
   return (
     <AppShell>
+      <StorageBanner message={getStorageWarning()} />
       <PageHeading
         kicker="Bar Monkey"
         title="Ranking ATP de la mesa"

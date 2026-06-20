@@ -45,6 +45,8 @@ type SqlClient = Sql<Record<string, unknown>>;
 
 const databaseUrl = process.env.POSTGRES_URL ?? process.env.DATABASE_URL;
 const initialPlayers = ["Joan", "Franco", "Eric", "Choco", "Lautaro"];
+const missingProductionDatabaseMessage =
+  "Falta configurar DATABASE_URL o POSTGRES_URL en Vercel. Sin Postgres, los partidos no se pueden guardar de forma persistente.";
 
 declare global {
   var monkeySql: SqlClient | undefined;
@@ -63,11 +65,33 @@ function toNullableScore(value: unknown) {
 }
 
 function localStorePath() {
-  if (process.env.VERCEL) {
-    return path.join("/tmp", "monkeypong.json");
+  return path.join(process.cwd(), ".data", "monkeypong.json");
+}
+
+export function isPersistentStorageConfigured() {
+  return Boolean(databaseUrl);
+}
+
+export function getStorageWarning() {
+  if (process.env.VERCEL && !databaseUrl) {
+    return missingProductionDatabaseMessage;
   }
 
-  return path.join(process.cwd(), ".data", "monkeypong.json");
+  if (!databaseUrl) {
+    return "Modo local: los datos se guardan en .data/monkeypong.json.";
+  }
+
+  return null;
+}
+
+function shouldUseLocalStore() {
+  return !databaseUrl && !process.env.VERCEL;
+}
+
+function assertCanWriteLocallyOrPersistently() {
+  if (process.env.VERCEL && !databaseUrl) {
+    throw new Error(missingProductionDatabaseMessage);
+  }
 }
 
 async function getSql() {
@@ -102,6 +126,10 @@ function seedStore(): LocalStore {
 }
 
 async function readLocalStore(): Promise<LocalStore> {
+  if (!shouldUseLocalStore()) {
+    return seedStore();
+  }
+
   const filePath = localStorePath();
 
   try {
@@ -115,6 +143,7 @@ async function readLocalStore(): Promise<LocalStore> {
 }
 
 async function writeLocalStore(store: LocalStore) {
+  assertCanWriteLocallyOrPersistently();
   const filePath = localStorePath();
   await mkdir(path.dirname(filePath), { recursive: true });
   await writeFile(filePath, `${JSON.stringify(store, null, 2)}\n`, "utf8");
@@ -224,6 +253,7 @@ export async function listPlayers() {
     return rows.map(mapDbPlayer);
   }
 
+  assertCanWriteLocallyOrPersistently();
   const store = await readLocalStore();
   return [...store.players].sort((a, b) => a.name.localeCompare(b.name, "es"));
 }
@@ -265,6 +295,7 @@ export async function createPlayer(input: { name: string; nickname?: string }) {
     return player;
   }
 
+  assertCanWriteLocallyOrPersistently();
   const store = await readLocalStore();
   const duplicate = store.players.some(
     (player) => player.name.toLowerCase() === name.toLowerCase()
